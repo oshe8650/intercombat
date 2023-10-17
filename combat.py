@@ -19,14 +19,14 @@ class Player(pg.sprite.Sprite):
 
     def update(self):
         global dt1
-        dt1 =+ pg.time.get_ticks()
+        dt1 += clock.get_time()
 
         key = pg.key.get_pressed()  
         if key[pg.K_UP]:
             self.rect.y -= 5
         if key[pg.K_DOWN]:
             self.rect.y += 5
-        if key[pg.K_SPACE] and dt1 > 100000:
+        if key[pg.K_SPACE] and dt1 > 1000:
             dt1 = 0
             bullet_group.add(player.shoot())
 
