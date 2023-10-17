@@ -6,8 +6,10 @@ clock = pg.time.Clock()
 running = True
 player_pos = pg.Vector2(screen.get_width() -25, screen.get_height() / 2)
 bullet_pos = pg.Vector2(player_pos.x, player_pos.y)
-dt = 0
 
+dt = 0
+dt1 = 0
+cooldown = 500
 
 ##Klasser
 class Player(pg.sprite.Sprite):
@@ -22,11 +24,13 @@ class Player(pg.sprite.Sprite):
         dt1 += clock.get_time()
 
         key = pg.key.get_pressed()  
-        if key[pg.K_UP]:
-            self.rect.y -= 5
+        if key[pg.K_UP]: 
+            if self.rect.y > 0:
+                self.rect.y -= 5
         if key[pg.K_DOWN]:
-            self.rect.y += 5
-        if key[pg.K_SPACE] and dt1 > 1000:
+            if self.rect.y < 720 - 100:
+                self.rect.y += 5
+        if key[pg.K_SPACE] and dt1 > cooldown:
             dt1 = 0
             bullet_group.add(player.shoot())
 
@@ -38,7 +42,7 @@ class Bullet(pg.sprite.Sprite):
         super().__init__()
         self.image = pg.Surface((50,10))
         self.image.fill("red")
-        self.rect = self.image.get_rect(center = (x, y))
+        self.rect = self.image.get_rect(center = (x, y+50))
 
     def update(self):
         self.rect.x -= 10
@@ -50,7 +54,6 @@ player_group.add(player)
 bullet_group = pg.sprite.Group()
 
     
-dt1 = 0
 while running:
     
     for event in pg.event.get():
