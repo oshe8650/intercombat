@@ -8,6 +8,8 @@ player_pos = pg.Vector2(screen.get_width() -25, screen.get_height() / 2)
 bullet_pos = pg.Vector2(player_pos.x, player_pos.y)
 dt = 0
 
+
+##Klasser
 class Player(pg.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -16,12 +18,16 @@ class Player(pg.sprite.Sprite):
         self.rect = self.image.get_rect(center = (screen.get_width() - 25, screen.get_height()/2))
 
     def update(self):
+        global dt1
+        dt1 =+ pg.time.get_ticks()
+
         key = pg.key.get_pressed()  
         if key[pg.K_UP]:
             self.rect.y -= 5
         if key[pg.K_DOWN]:
             self.rect.y += 5
-        if key[pg.K_SPACE]:
+        if key[pg.K_SPACE] and dt1 > 100000:
+            dt1 = 0
             bullet_group.add(player.shoot())
 
     def shoot(self):
@@ -44,7 +50,7 @@ player_group.add(player)
 bullet_group = pg.sprite.Group()
 
     
-
+dt1 = 0
 while running:
     
     for event in pg.event.get():
