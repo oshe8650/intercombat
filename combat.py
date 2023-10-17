@@ -6,7 +6,7 @@ clock = pg.time.Clock()
 running = True
 player_pos = pg.Vector2(screen.get_width() -25, screen.get_height() / 2)
 bullet_pos = pg.Vector2(player_pos.x, player_pos.y)
-dt = 10
+dt = 0
 
 
 
