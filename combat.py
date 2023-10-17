@@ -7,7 +7,7 @@ running = True
 player_pos = pg.Vector2(screen.get_width() -25, screen.get_height() / 2)
 bullet_pos = pg.Vector2(player_pos.x, player_pos.y)
 dt = 0
-
+cooldownP1 = 1000
 
 ##Klasser
 class Player(pg.sprite.Sprite):
@@ -26,7 +26,7 @@ class Player(pg.sprite.Sprite):
             self.rect.y -= 5
         if key[pg.K_DOWN]:
             self.rect.y += 5
-        if key[pg.K_SPACE] and dt1 > 1000:
+        if key[pg.K_SPACE] and dt1 > cooldownP1:
             dt1 = 0
             bullet_group.add(player.shoot())
 
