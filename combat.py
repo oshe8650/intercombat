@@ -4,10 +4,13 @@ pg.init()
 screen = pg.display.set_mode((1440, 720))
 clock = pg.time.Clock()
 running = True
+
 player_pos = pg.Vector2(screen.get_width() -25, screen.get_height() / 2)
 bullet_pos = pg.Vector2(player_pos.x, player_pos.y)
+
 dt = 0
-cooldownP1 = 1000
+dt1 = 0
+cooldownP1 = 500
 
 ##Klasser
 class Player(pg.sprite.Sprite):
@@ -49,8 +52,7 @@ player_group = pg.sprite.Group()
 player_group.add(player)
 bullet_group = pg.sprite.Group()
 
-    
-dt1 = 0
+
 while running:
     
     for event in pg.event.get():
