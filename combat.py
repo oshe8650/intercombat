@@ -1,5 +1,6 @@
+from typing import Any
 import pygame as pg
-
+from random import randint
 pg.init()
 screen = pg.display.set_mode((1440, 720))
 clock = pg.time.Clock()
@@ -11,6 +12,7 @@ bullet_pos = pg.Vector2(player_pos.x, player_pos.y)
 dt = 0
 dt1 = 0
 cooldownP1 = 500
+cooldownP2 = 5000
 
 ##Klasser
 class Player(pg.sprite.Sprite):
@@ -46,25 +48,64 @@ class Bullet(pg.sprite.Sprite):
     def update(self):
         self.rect.x -= 10
         
+    def hit(self, x, y):
+        if self.rect.x and self.rect.y == x and y:
+            power_group.empty()
+     
+
+class Powerups(pg.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pg.Surface((100, 50))
+        self.image.fill("red")
+        x = randint(300, 1000)
+        y = randint(100, 620)
+        self.rect = self.image.get_rect(center = (x, y))
+
+    def hit(self):
+        return Bullet.hit(self, self.rect.x, self.rect.y)
+        
+
+            
+       
+       
+            
     
+        
+
+ 
+
+        
 player = Player()
 player_group = pg.sprite.Group()
 player_group.add(player)
 bullet_group = pg.sprite.Group()
-
+power_group = pg.sprite.Group()
 
 while running:
     
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
-            
+    
+    if clock.get_time()%10 == 0:
+        power_group.empty()
+        power = Powerups()
+        power_group.add(power)
+    
+        
+ 
+        
+    
 
     screen.fill("black")
+    power_group.draw(screen)
     bullet_group.draw(screen)
     player_group.draw(screen)
     player_group.update()
     bullet_group.update()
+    power.hit()
+    
     
 
 
