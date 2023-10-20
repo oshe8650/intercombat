@@ -66,15 +66,7 @@ class Powerups(pg.sprite.Sprite):
         return Bullet.hit(self, self.rect.x, self.rect.y)
         
 
-            
-       
-       
-            
-    
         
-
- 
-
         
 player = Player()
 player_group = pg.sprite.Group()
@@ -92,10 +84,6 @@ while running:
         power_group.empty()
         power = Powerups()
         power_group.add(power)
-    
-        
- 
-        
     
 
     screen.fill("black")
