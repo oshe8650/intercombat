@@ -62,8 +62,13 @@ class Powerups(pg.sprite.Sprite):
         y = randint(100, 620)
         self.rect = self.image.get_rect(center = (x, y))
 
-    def hit(self):
-        return Bullet.hit(self, self.rect.x, self.rect.y)
+    def update(self):
+        hit = pg.sprite.spritecollide(self, bullet_group, True)
+        if hit:
+            self.kill()
+            
+
+        
         
 
         
@@ -80,7 +85,7 @@ while running:
         if event.type == pg.QUIT:
             running = False
     
-    if clock.get_time()%10 == 0:
+    if clock.get_time()%5 == 0:
         power_group.empty()
         power = Powerups()
         power_group.add(power)
@@ -92,7 +97,7 @@ while running:
     player_group.draw(screen)
     player_group.update()
     bullet_group.update()
-    power.hit()
+    power_group.update()
     
     
 
