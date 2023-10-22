@@ -22,16 +22,30 @@ class Player(pg.sprite.Sprite):
             self.image = pg.Surface((100, 100))
             self.image.fill("white")
             self.rect = self.image.get_rect(center = player1_pos)
+            self.hp = 5
         elif number == 2:
             self.image = pg.Surface((100, 100))
             self.image.fill("white")
             self.rect = self.image.get_rect(center = player2_pos)
+            self.hp = 5
 
     def update(self):
         global dt1
         global dt2
         dt1 += clock.get_time()
         dt2 += clock.get_time()
+
+        hits = pg.sprite.spritecollide(self, bullet_group, True)
+        if hits: #kollar om man har blivit träffad
+            if self.number == 1:
+                self.hp = self.hp - 1
+                if self.hp == 0:
+                    self.kill()
+                    
+            elif self.number == 2:
+                self.hp -= 1
+                if self.hp  == 0:
+                    self.kill()
 
         key = pg.key.get_pressed()
         if self.number == 1:  
@@ -65,9 +79,12 @@ class Bullet(pg.sprite.Sprite):
         self.image.fill("red")
         self.number = number
         if number == 1:
-            self.rect = self.image.get_rect(center = (x, y+50))
+            self.rect = self.image.get_rect(center = (x-13, y+50))
         elif number == 2:
-            self.rect = self.image.get_rect(center = (x+50, y+50))
+            self.rect = self.image.get_rect(center = (x+114, y+50))
+
+        if self.rect.x < 0 or self.rect.x > 1440: #despawnar kulorna
+            self.kill()
 
     def update(self):
         if self.number == 1:
@@ -95,6 +112,11 @@ while running:
     player_group.update()
     bullet_group.update()
     
+
+        
+
+    pg.display.flip()
+
 
 
 
