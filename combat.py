@@ -8,10 +8,12 @@ player1_pos = pg.Vector2(screen.get_width() -25, screen.get_height() / 2)
 player2_pos = pg.Vector2(25, screen.get_height() / 2)
 bullet1_pos = pg.Vector2(player1_pos.x, player1_pos.y)
 
+
+player_pos = pg.Vector2(screen.get_width() -25, screen.get_height() / 2)
+bullet_pos = pg.Vector2(player_pos.x, player_pos.y)
+
 dt = 0
-dt1 = 0
-dt2 = 0
-cooldown = 500
+
 
 ##Klasser
 class Player(pg.sprite.Sprite):
@@ -47,30 +49,17 @@ class Player(pg.sprite.Sprite):
                 if self.hp  == 0:
                     self.kill()
 
-        key = pg.key.get_pressed()
-        if self.number == 1:  
-            if key[pg.K_UP]: 
-                if self.rect.y > 0:
-                    self.rect.y -= 5
-            if key[pg.K_DOWN]:
-                if self.rect.y < 720 - 100:
-                    self.rect.y += 5
-            if key[pg.K_SPACE] and dt1 > cooldown:
-                dt1 = 0
-                bullet_group.add(player1.shoot(1))
-        elif self.number == 2:  
-            if key[pg.K_w]: 
-                if self.rect.y > 0:
-                    self.rect.y -= 5
-            if key[pg.K_s]:
-                if self.rect.y < 720 - 100:
-                    self.rect.y += 5
-            if key[pg.K_LSHIFT] and dt2 > cooldown:
-                dt2 = 0
-                bullet_group.add(player2.shoot(2))
+        key = pg.key.get_pressed()  
+        if key[pg.K_UP]:
+            self.rect.y -= 5
+        if key[pg.K_DOWN]:
+            self.rect.y += 5
+        if key[pg.K_SPACE] and dt1 > 1000:
+            dt1 = 0
+            bullet_group.add(player.shoot())
 
-    def shoot(self, number):
-        return Bullet(self.rect.x, self.rect.y, number)
+    def shoot(self):
+        return Bullet(self.rect.x, self.rect.y)
 
 class Bullet(pg.sprite.Sprite):
     def __init__(self, x, y, number):
@@ -99,6 +88,7 @@ player_group.add(player1, player2)
 bullet_group = pg.sprite.Group()
 
     
+dt1 = 0
 while running:
     
     for event in pg.event.get():
