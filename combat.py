@@ -12,6 +12,8 @@ dt = 0
 dt1 = 0
 dt2 = 0
 cooldown = 500
+timer_change = 0
+timer_power = 0
 
 ##Klasser
 class Player(pg.sprite.Sprite):
@@ -79,7 +81,7 @@ class Bullet(pg.sprite.Sprite):
         self.image.fill("red")
         self.number = number
         if number == 1:
-            self.rect = self.image.get_rect(center = (x-13, y+50))
+            self.rect = self.image.get_rect(center = (x-14, y+50))
         elif number == 2:
             self.rect = self.image.get_rect(center = (x+114, y+50))
 
@@ -104,11 +106,11 @@ class Powerups(pg.sprite.Sprite):
 
     def update(self):
         hit = pg.sprite.spritecollide(self, bullet_group, True)
-        global cooldownP1
+        global cooldown
         if hit: 
             self.kill()
-            if cooldownP1 == 500:
-                cooldownP1 = cooldownP1/2
+            if cooldown == 500:
+                cooldown = cooldown/2
          
     
 player1 = Player(1)
@@ -116,6 +118,7 @@ player2 = Player(2)
 player_group = pg.sprite.Group()
 player_group.add(player1, player2)
 bullet_group = pg.sprite.Group()
+power_group = pg.sprite.Group()
 
     
 while running:
@@ -125,12 +128,29 @@ while running:
             running = False
             
 
+
+    timer_change += pg.time.get_ticks()
+    timer_power += pg.time.get_ticks()
+
+    if timer_change%1257 == 0:
+        timer_change = 0
+        power_group.empty()
+        power = Powerups()
+        power_group.add(power)
+        
+        
+    if timer_power%200 == 0:    
+        cooldown = 500 
+        timer_power = 0
+
+
     screen.fill("black")
     bullet_group.draw(screen)
     player_group.draw(screen)
+    power_group.draw(screen)
     player_group.update()
     bullet_group.update()
-    
+    power_group.update()
 
 
     pg.display.flip()
