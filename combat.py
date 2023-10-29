@@ -11,7 +11,8 @@ player2_pos = pg.Vector2(25, screen.get_height() / 2)
 dt = 0
 dt1 = 0
 dt2 = 0
-cooldown = 500
+cooldown1 = 1000
+cooldown2 = 1000
 timer_change = 0
 timer_power = 0
 
@@ -37,8 +38,9 @@ class Player(pg.sprite.Sprite):
         dt1 += clock.get_time()
         dt2 += clock.get_time()
 
-        hits = pg.sprite.spritecollide(self, bullet_group, True)
-        if hits: #kollar om man har blivit träffad
+        hits = pg.sprite.spritecollide(self, bullet_group1, True)
+        hits1 = pg.sprite.spritecollide(self, bullet_group2, True)
+        if hits or hits1: #kollar om man har blivit träffad
             if self.number == 1:
                 self.hp = self.hp - 1
                 if self.hp == 0:
@@ -57,9 +59,9 @@ class Player(pg.sprite.Sprite):
             if key[pg.K_DOWN]:
                 if self.rect.y < 720 - 100:
                     self.rect.y += 5
-            if key[pg.K_SPACE] and dt1 > cooldown:
+            if key[pg.K_SPACE] and dt1 > cooldown2:
                 dt1 = 0
-                bullet_group.add(player1.shoot(1))
+                bullet_group1.add(player1.shoot(1))
         elif self.number == 2:  
             if key[pg.K_w]: 
                 if self.rect.y > 0:
@@ -67,9 +69,9 @@ class Player(pg.sprite.Sprite):
             if key[pg.K_s]:
                 if self.rect.y < 720 - 100:
                     self.rect.y += 5
-            if key[pg.K_LSHIFT] and dt2 > cooldown:
+            if key[pg.K_LSHIFT] and dt2 > cooldown1:
                 dt2 = 0
-                bullet_group.add(player2.shoot(2))
+                bullet_group2.add(player2.shoot(2))
 
     def shoot(self, number):
         return Bullet(self.rect.x, self.rect.y, number)
@@ -105,19 +107,26 @@ class Powerups(pg.sprite.Sprite):
         self.rect = self.image.get_rect(center = (x, y))
 
     def update(self):
-        hit = pg.sprite.spritecollide(self, bullet_group, True)
-        global cooldown
-        if hit: 
+        hit1 = pg.sprite.spritecollide(self, bullet_group2, True)
+        hit2 = pg.sprite.spritecollide(self, bullet_group1, True)
+        global cooldown1
+        global cooldown2
+        if hit2: 
             self.kill()
-            if cooldown == 500:
-                cooldown = cooldown/2
+            if cooldown2 == 1000:
+                cooldown2 = cooldown2/2
+        elif hit1: 
+            self.kill()
+            if cooldown1 == 1000:
+                cooldown1 = cooldown1/2
          
     
 player1 = Player(1)
 player2 = Player(2)
 player_group = pg.sprite.Group()
 player_group.add(player1, player2)
-bullet_group = pg.sprite.Group()
+bullet_group1 = pg.sprite.Group()
+bullet_group2 = pg.sprite.Group()
 power_group = pg.sprite.Group()
 
     
@@ -140,16 +149,19 @@ while running:
         
         
     if timer_power%200 == 0:    
-        cooldown = 500 
+        cooldown1 = 1000
+        cooldown2 = 1000
         timer_power = 0
 
 
     screen.fill("black")
-    bullet_group.draw(screen)
+    bullet_group1.draw(screen)
+    bullet_group2.draw(screen)
     player_group.draw(screen)
     power_group.draw(screen)
     player_group.update()
-    bullet_group.update()
+    bullet_group1.update()
+    bullet_group2.update()
     power_group.update()
 
 
