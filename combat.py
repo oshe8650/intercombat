@@ -1,6 +1,8 @@
 from typing import Any
 import pygame as pg
 from random import randint
+import time
+
 pg.init()
 screen = pg.display.set_mode((1440, 720))
 clock = pg.time.Clock()
@@ -12,7 +14,11 @@ bullet_pos = pg.Vector2(player_pos.x, player_pos.y)
 dt = 0
 dt1 = 0
 cooldownP1 = 500
-cooldownP2 = 5000
+cooldownP2 = 500
+
+timer_power = 0
+timer_change = 0
+
 
 ##Klasser
 class Player(pg.sprite.Sprite):
@@ -64,12 +70,12 @@ class Powerups(pg.sprite.Sprite):
 
     def update(self):
         hit = pg.sprite.spritecollide(self, bullet_group, True)
-        if hit:
+        global cooldownP1
+        if hit: 
             self.kill()
-            
-
-        
-        
+            if cooldownP1 == 500:
+                cooldownP1 = cooldownP1/2
+         
 
         
         
@@ -85,11 +91,22 @@ while running:
         if event.type == pg.QUIT:
             running = False
     
-    if clock.get_time()%5 == 0:
+    
+    timer_change += pg.time.get_ticks()
+    timer_power += pg.time.get_ticks()
+
+    if timer_change%1257 == 0:
+        timer_change = 0
         power_group.empty()
         power = Powerups()
         power_group.add(power)
-    
+        
+        
+    if timer_power%200 == 0:    
+        cooldownP1 = 500 
+        timer_power = 0
+
+
 
     screen.fill("black")
     power_group.draw(screen)
@@ -100,8 +117,6 @@ while running:
     power_group.update()
     
     
-
-
 
     pg.display.flip()
 
