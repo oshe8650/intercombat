@@ -1,4 +1,5 @@
 import pygame as pg
+from random import randint
 
 pg.init()
 screen = pg.display.set_mode((1440, 720))
@@ -90,6 +91,25 @@ class Bullet(pg.sprite.Sprite):
             self.rect.x -= 700 * dt
         elif self.number == 2:
             self.rect.x += 700 * dt
+
+
+class Powerups(pg.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pg.Surface((100, 50))
+        self.image.fill("red")
+        x = randint(300, 1000)
+        y = randint(100, 620)
+        self.rect = self.image.get_rect(center = (x, y))
+
+    def update(self):
+        hit = pg.sprite.spritecollide(self, bullet_group, True)
+        global cooldownP1
+        if hit: 
+            self.kill()
+            if cooldownP1 == 500:
+                cooldownP1 = cooldownP1/2
+         
     
 player1 = Player(1)
 player2 = Player(2)
